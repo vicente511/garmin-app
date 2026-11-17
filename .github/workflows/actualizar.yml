@@ -1,0 +1,37 @@
+name: Actualizar app Garmin
+on:
+  schedule:
+    - cron: "40 6 * * *"   # ~3:40 hora de Chile (verano)
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: garmin-app
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      TZ: America/Santiago
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q -r requirements.txt
+      # Repositorio público: los registros son visibles, así que no se imprime ningún dato.
+      - name: Bajar datos de Garmin y cifrarlos
+        env:
+          GARMIN_TOKEN_B64: ${{ secrets.GARMIN_TOKEN_B64 }}
+          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
+        run: |
+          mkdir -p _work
+          python crypto_store.py decrypt data.enc _work/garmin/data.json
+          python sync_garmin.py --days 3 --out _work/garmin > /dev/null 2>&1 || { echo "No se pudo sincronizar con Garmin"; exit 1; }
+          python crypto_store.py encrypt _work/garmin/data.json data.enc
+          echo "Datos actualizados y cifrados"
+      - name: Publicar
+        run: |
+          git config user.name "garmin-sync"
+          git config user.email "garmin-sync@users.noreply.github.com"
+          git add data.enc
+          git commit -q -m "Datos cifrados $(date +%F)" || echo "Sin cambios"
+          git push -q

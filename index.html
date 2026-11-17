@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b0b0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Garmin">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-180.png">
+<title>Mi recuperación</title>
+<style>
+:root{--bg:#0b0b0c;--card:#1c1c1e;--card2:#26262a;--tx:#f5f5f7;--mu:#8e8e93;--line:#2c2c30;--or:#ff8a00;--or2:#ffb547;--teal:#5ce1d6;--lime:#d4f05a;--red:#ff4d5e;--vio:#9b8cff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body{padding:calc(env(safe-area-inset-top) + 8px) 14px calc(env(safe-area-inset-bottom) + 24px)}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.head{display:flex;justify-content:space-between;align-items:center;padding:6px 4px 0}
+.sub{font-size:13px;color:var(--mu)}
+.title{font-size:31px;font-weight:700;letter-spacing:-.02em;margin:2px 0 0;line-height:1.1}
+.avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--or2),var(--or));color:#1a1000;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:16px;border:0;flex:none}
+.lede{margin:0 4px;color:var(--mu);font-size:15px;line-height:1.5}
+.lede b{color:var(--tx);font-weight:600}
+.card{background:var(--card);border-radius:24px;padding:18px}
+.card-h{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.card-s{font-size:13px;color:var(--mu);margin-top:3px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.balance{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;min-width:0}
+.list li{display:flex;gap:10px;align-items:center}
+.ic{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none;background:var(--card2)}
+.ic svg{width:17px;height:17px}
+.k{font-size:13px;color:var(--mu)}
+.v{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.v small,.mini-v small{font-size:12px;color:var(--mu);font-weight:400;margin-left:3px}
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;margin-left:6px;vertical-align:2px}
+.good{background:rgba(92,225,214,.14);color:var(--teal)}.bad{background:rgba(255,77,94,.15);color:var(--red)}.neu{background:var(--card2);color:var(--mu)}
+.ring{width:min(44vw,168px);aspect-ratio:1;flex:none;position:relative}
+.ring svg{width:100%;height:100%;display:block}
+.ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-v{font-size:30px;font-weight:700;color:#3a2200;font-variant-numeric:tabular-nums;line-height:1}
+.ring-u{font-size:13px;color:#6b4300;margin-top:3px}
+.mini-h{font-size:15px;font-weight:600}
+.mini-v{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums}
+.mini-v svg{width:20px;height:20px;flex:none}
+.mini-s{font-size:12px;color:var(--mu);margin-top:4px}
+.bar{height:9px;border-radius:9px;background:var(--card2);margin-top:14px;overflow:hidden}
+.bar>div{height:100%;border-radius:9px;width:0;transition:width .6s ease}
+.race{background:linear-gradient(140deg,#2a1700 0%,#1c1c1e 55%)}
+.race-top{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-top:12px}
+.count{font-size:58px;font-weight:700;line-height:.9;color:var(--or);font-variant-numeric:tabular-nums}
+.today{flex:1 1 200px;min-width:0;background:rgba(255,255,255,.05);border-radius:16px;padding:12px 14px}
+.today-t{font-size:15px;font-weight:600;line-height:1.35;margin-top:4px}
+.note{font-size:13px;color:var(--mu);line-height:1.5;margin:12px 0 0}
+.note b{color:var(--tx);font-weight:600}
+.pills{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;margin-top:14px}
+.pills::-webkit-scrollbar{display:none}
+.pill{font:inherit;font-size:14px;padding:9px 16px;border-radius:999px;border:0;background:var(--card2);color:var(--tx);white-space:nowrap;flex:none}
+.pill[aria-pressed="true"]{background:var(--or);color:#1a1000;font-weight:600}
+.pill-sm{font-size:12px;padding:6px 11px;background:transparent;border:1px solid var(--line);color:var(--mu)}
+.pill-sm[aria-pressed="true"]{background:var(--tx);color:#111;border-color:var(--tx)}
+.big{font-size:38px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05;margin-top:8px}
+.big small{font-size:15px;color:var(--mu);font-weight:400;margin-left:6px}
+.chart{position:relative;margin-top:10px;touch-action:pan-y}
+.chart svg{display:block;width:100%}
+.chart text{fill:var(--mu);font-size:11px}
+.help{margin-top:12px;font-size:13px;color:var(--mu);line-height:1.5}
+.help summary{color:var(--or2);font-weight:600;list-style:none;cursor:pointer}
+.help summary::-webkit-details-marker{display:none}
+.help p,.help ul,.help dl{margin:8px 0 0}
+.help ul{padding-left:1.15em}
+.help b,.help dt{color:var(--tx);font-weight:600}
+.help dd{margin:0 0 6px}
+.nav{display:flex;align-items:center;gap:8px;margin-top:12px}
+.round{width:40px;height:40px;border-radius:50%;border:0;background:var(--card2);color:var(--tx);font-size:20px;flex:none}
+.round:disabled{opacity:.3}
+.nav-t{flex:1;text-align:center;font-size:14px;font-weight:600}
+.tw{overflow-x:auto;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+th{text-align:left;font-weight:500;font-size:12px;color:var(--mu);padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 8px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:top}
+tr:last-child td{border-bottom:0}
+.num{text-align:right}
+td.wrap{white-space:normal;min-width:170px}
+tr.is-today td{color:var(--or2);font-weight:600}
+.empty{color:var(--mu);font-size:13px;padding:22px 0;text-align:center}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--mu);font-size:12px;padding:0 4px}
+.link{background:none;border:0;color:var(--or2);font:inherit;font-size:12px;padding:6px 0}
+/* bloqueo */
+.lock{min-height:80vh;display:flex;flex-direction:column;justify-content:center;gap:16px;max-width:380px;margin:0 auto}
+.lock input{font:inherit;font-size:17px;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--tx);width:100%}
+.btn{font:inherit;font-size:16px;font-weight:600;padding:14px;border-radius:14px;border:0;background:var(--or);color:#1a1000;width:100%}
+.err{color:var(--red);font-size:14px;min-height:18px}
+.spin{color:var(--mu);text-align:center;padding:60px 0}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"><div class="spin">Cargando…</div></div>
+
+<script>
+"use strict";
+// ---------- utilidades ----------
+const $ = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") e.className = v; else if (k === "style") e.style.cssText = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c !== null && c !== undefined && c !== false) e.append(c.nodeType ? c : String(c));
+  return e;
+};
+const svgNS = "http://www.w3.org/2000/svg";
+const S = (tag, attrs = {}) => { const e = document.createElementNS(svgNS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); return e; };
+const svgIcon = (html) => { const t = document.createElement("template"); t.innerHTML = html; return t.content.firstChild; };
+const nf = (d) => new Intl.NumberFormat("es-CL", {minimumFractionDigits: d, maximumFractionDigits: d});
+const f0 = (v) => nf(0).format(v), f1 = (v) => nf(1).format(v), f2 = (v) => nf(2).format(v);
+const num = (v) => (v === null || v === undefined || v === "") ? null : +v;
+const MESES = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const DIAS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const DIAS3 = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+const pd = (s) => new Date(s + "T00:00:00Z");
+const iso = (d) => d.toISOString().slice(0, 10);
+const addD = (d, n) => { const x = new Date(d); x.setUTCDate(x.getUTCDate() + n); return x; };
+const corto = (s) => { const d = pd(s); return d.getUTCDate() + " " + MESES[d.getUTCMonth()]; };
+const largo = (s) => { const d = pd(s); return DIAS[d.getUTCDay()] + " " + d.getUTCDate() + " " + MESES[d.getUTCMonth()]; };
+const hoyStr = () => new Date().toLocaleDateString("en-CA", {timeZone: "America/Santiago"});
+const avg = (a) => { const v = a.filter((x) => x !== null); return v.length ? v.reduce((s, x) => s + x, 0) / v.length : null; };
+const r1 = (x) => x === null ? null : Math.round(x * 10) / 10;
+
+// ---------- cifrado (mismo formato que crypto_store.py) ----------
+async function descifrar(pw, b64) {
+  const b = Uint8Array.from(atob(b64.trim()), (c) => c.charCodeAt(0));
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({name: "PBKDF2", salt: b.slice(0, 16), iterations: 250000, hash: "SHA-256"}, base, {name: "AES-GCM", length: 256}, false, ["decrypt"]);
+  const plain = await crypto.subtle.decrypt({name: "AES-GCM", iv: b.slice(16, 28)}, key, b.slice(28));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+async function bajar(nombre) {
+  const r = await fetch(nombre + "?t=" + Date.now(), {cache: "no-store"});
+  if (!r.ok) throw new Error("sin " + nombre);
+  return r.text();
+}
+
+// ---------- pantalla de clave ----------
+const KEY = "garmin_app_clave";
+function pantallaClave(msg) {
+  const app = document.getElementById("app");
+  const inp = $("input", {type: "password", placeholder: "Clave", autocomplete: "current-password", autocapitalize: "off"});
+  const err = $("div", {class: "err"}, msg || "");
+  const go = async () => {
+    err.textContent = "Abriendo…";
+    try { await cargar(inp.value); localStorage.setItem(KEY, inp.value); }
+    catch (e) { err.textContent = "Clave incorrecta o sin datos todavía."; }
+  };
+  inp.addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+  app.replaceChildren($("div", {class: "lock"},
+    $("div", {class: "avatar", style: "width:64px;height:64px;font-size:22px"}, "VG"),
+    $("div", {class: "title"}, "Mi recuperación"),
+    $("div", {class: "sub"}, "Tus datos están cifrados. Escribe tu clave una vez y queda guardada en este teléfono."),
+    inp, $("button", {class: "btn", onclick: go}, "Entrar"), err));
+  inp.focus();
+}
+
+let DATA = null;
+async function cargar(pw) {
+  const [d, p] = await Promise.all([bajar("data.enc"), bajar("plan.enc").catch(() => null)]);
+  const store = await descifrar(pw, d);
+  const plan = p ? await descifrar(pw, p) : {plan: [], etapas: []};
+  DATA = preparar(store, plan);
+  render();
+}
+
+// ---------- cálculos ----------
+function preparar(store, plan) {
+  const w = Object.values(store.wellness || {}).map((r) => ({
+    fecha: r.date, pulso: num(r.resting_hr), hrv: num(r.hrv_overnight_ms), sueno: num(r.sleep_hours),
+    estres: num(r.stress_avg), pasos: num(r.steps), bb: num(r.body_battery_high), tr: num(r.training_readiness)
+  })).sort((a, b) => a.fecha < b.fecha ? -1 : 1);
+  const acts = Object.values(store.activities || {}).map((a) => ({
+    id: a.id, fecha: (a.start_local || "").slice(0, 10), hora: (a.start_local || "").slice(11, 16),
+    nombre: a.name || a.type || "Actividad", tipo: a.type, km: num(a.distance_km), min: num(a.duration_min),
+    hr: num(a.avg_hr), te: num(a.aerobic_te)
+  })).sort((a, b) => (a.fecha + a.hora) < (b.fecha + b.hora) ? 1 : -1);
+
+  const last = w[w.length - 1] || null, prev = w.slice(-8, -1);
+  const hoy = last ? {fecha: last.fecha} : null;
+  if (last) {
+    for (const k of ["sueno", "pulso", "estres", "hrv"]) {
+      const p = avg(prev.map((r) => r[k]));
+      hoy[k] = last[k]; hoy[k + "_dif"] = last[k] !== null && p !== null ? r1(last[k] - p) : null;
+    }
+    hoy.pasos_ayer = w.length > 1 ? w[w.length - 2].pasos : null;
+  }
+  const l3 = w.slice(-3), base = w.slice(-30, -3);
+  const forma = w.length ? {
+    p3: r1(avg(l3.map((r) => r.pulso))), pb: r1(avg(base.map((r) => r.pulso))),
+    s3: r1(avg(l3.map((r) => r.sueno))), sb: r1(avg(base.map((r) => r.sueno)))
+  } : null;
+
+  const planRows = plan.plan || [];
+  const fechas = [...planRows.map((p) => p.fecha), ...acts.map((a) => a.fecha)].filter(Boolean).sort();
+  const semana = [];
+  if (fechas.length) {
+    for (let d = pd(fechas[0]); d <= pd(fechas[fechas.length - 1]); d = addD(d, 1)) {
+      const f = iso(d), p = planRows.find((x) => x.fecha === f), a = acts.filter((x) => x.fecha === f);
+      const mins = a.reduce((s, x) => s + (x.min || 0), 0);
+      const hw = a.filter((x) => x.hr && x.min), hm = hw.reduce((s, x) => s + x.min, 0);
+      semana.push({fecha: f, dia: DIAS3[d.getUTCDay()], sesion: p ? p.sesion : null, objetivo: p ? p.objetivo : null,
+        act: a.length ? a.map((x) => x.nombre).join(" + ") : null, min: a.length ? Math.round(mins) : null,
+        hr: hm ? Math.round(hw.reduce((s, x) => s + x.hr * x.min, 0) / hm) : null});
+    }
+  }
+  return {w, acts, hoy, forma, semana, plan: planRows, etapas: plan.etapas || [], updated: store.updated};
+}
+
+// ---------- vista ----------
+const ST = {metric: "sueno", dias: 30, sel: null, sem: 0};
+const M = {
+  sueno: {label: "Sueño", unit: "h", fmt: f1, color: "#9b8cff", zero: true},
+  pulso: {label: "Pulso en reposo", unit: "lpm", fmt: f0, color: "#ff4d5e", zero: false},
+  estres: {label: "Estrés", unit: "/100", fmt: f0, color: "#ff8a00", zero: true},
+  pasos: {label: "Pasos", unit: "pasos", fmt: f0, color: "#5ce1d6", zero: true},
+  hrv: {label: "HRV", unit: "ms", fmt: f0, color: "#d4f05a", zero: false}
+};
+const LARGADA = new Date("2026-11-22T08:00:00-03:00"), FIN = new Date("2026-11-26T00:00:00-03:00");
+
+const chip = (d, mejorSiBaja) => {
+  if (d === null || d === undefined) return null;
+  const bueno = Math.abs(d) < 0.05 ? null : (mejorSiBaja ? d < 0 : d > 0);
+  return $("span", {class: "chip " + (bueno === null ? "neu" : bueno ? "good" : "bad")}, (d > 0 ? "+" : d < 0 ? "−" : "") + f1(Math.abs(d)));
+};
+const ICON = {
+  heart: '<svg viewBox="0 0 24 24" fill="#ff4d5e"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.3 3.4 5 6.8 5c2 0 3.5 1.1 4.2 2.4C11.7 6.1 13.2 5 15.2 5 18.6 5 21 8.3 19.5 11.8 17.5 16.4 12 21 12 21z"/></svg>',
+  bolt: '<svg viewBox="0 0 24 24" fill="#ff8a00"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>',
+  wave: '<svg viewBox="0 0 24 24" fill="none" stroke="#9b8cff" stroke-width="2.4" stroke-linecap="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>',
+  feet: '<svg viewBox="0 0 24 24" fill="#5ce1d6"><ellipse cx="8" cy="8" rx="3.2" ry="5"/><ellipse cx="16" cy="13" rx="3.2" ry="5"/><circle cx="8" cy="16.5" r="2"/><circle cx="16" cy="21" r="1.8"/></svg>',
+  clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d4f05a"/><path d="M12 6v6l4 2" stroke="#1c1c1e" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>'
+};
+
+function anillo(v) {
+  const pct = v === null ? 0 : Math.min(1, v / 8), C = 2 * Math.PI * 86;
+  const svg = S("svg", {viewBox: "0 0 200 200", role: "img", "aria-label": v === null ? "Sin dato de sueño" : "Sueño " + f1(v) + " h de 8"});
+  const defs = S("defs"), g = S("radialGradient", {id: "rf"});
+  g.append(S("stop", {offset: "0%", "stop-color": "#ffd9a3"}), S("stop", {offset: "100%", "stop-color": "#ffb04a"}));
+  defs.append(g);
+  svg.append(defs,
+    S("circle", {cx: 100, cy: 100, r: 86, fill: "none", stroke: "#2c2c30", "stroke-width": 12}),
+    S("circle", {cx: 100, cy: 100, r: 86, fill: "none", stroke: "#ff8a00", "stroke-width": 12, "stroke-linecap": "round", "stroke-dasharray": (C * pct) + " " + C, transform: "rotate(-90 100 100)"}),
+    S("circle", {cx: 100, cy: 100, r: 66, fill: "url(#rf)"}));
+  return $("div", {class: "ring"}, svg, $("div", {class: "ring-c"}, $("div", {class: "ring-v"}, v === null ? "—" : f1(v)), $("div", {class: "ring-u"}, "h de sueño")));
+}
+
+function estadisticas() {
+  const box = $("div");
+  const draw = () => {
+    const m = M[ST.metric], w = DATA.w;
+    box.replaceChildren();
+    if (!w.length) { box.append($("div", {class: "empty"}, "Sin datos todavía")); return; }
+    const lastD = pd(w[w.length - 1].fecha), by = new Map(w.map((r) => [r.fecha, r[ST.metric]]));
+    const pts = []; for (let i = ST.dias - 1; i >= 0; i--) { const f = iso(addD(lastD, -i)); pts.push({fecha: f, v: by.has(f) ? by.get(f) : null}); }
+    const vals = pts.filter((p) => p.v !== null);
+    if (!vals.length) { box.append($("div", {class: "empty"}, "Sin datos de " + m.label.toLowerCase() + " en este período")); return; }
+    let sel = vals.find((p) => p.fecha === ST.sel) || vals[vals.length - 1];
+    const head = $("div");
+    const showHead = () => head.replaceChildren($("div", {class: "big"}, m.fmt(sel.v), $("small", {}, m.unit)), $("div", {class: "k"}, m.label + " · " + largo(sel.fecha)));
+    showHead();
+    const W = 340, H = 170, mb = 22, n = pts.length, step = W / n, bw = Math.max(3, step * (n > 40 ? 0.6 : 0.5));
+    const lo = Math.min(...vals.map((p) => p.v)), hi = Math.max(...vals.map((p) => p.v));
+    const pad = Math.max(1, (hi - lo) * 0.35), y0 = m.zero ? 0 : lo - pad, y1 = m.zero ? (hi || 1) : hi + pad * 0.3;
+    const y = (v) => (H - mb) - (v - y0) / (y1 - y0 || 1) * (H - mb - 8);
+    const svg = S("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": m.label + " por día"});
+    for (let i = 1; i <= 3; i++) { const yy = 8 + (H - mb - 8) * (i - 1) / 3; svg.append(S("line", {x1: 0, x2: W, y1: yy, y2: yy, stroke: "#2c2c30", "stroke-dasharray": "3 5"})); }
+    const rects = [];
+    pts.forEach((p, i) => {
+      if (p.v === null) return;
+      const x = i * step + (step - bw) / 2, top = Math.min(y(p.v), H - mb - bw);
+      const r = S("rect", {x, y: top, width: bw, height: H - mb - top, rx: Math.min(bw / 2, 8), fill: p === sel ? m.color : "#3a3a3e"});
+      r.__p = p; rects.push(r); svg.append(r);
+    });
+    const every = ST.dias <= 7 ? 1 : Math.ceil(n / 6);
+    pts.forEach((p, i) => {
+      if ((n - 1 - i) % every) return;
+      const t = S("text", {x: i * step + step / 2, y: H - 5, "text-anchor": "middle"});
+      t.textContent = ST.dias <= 7 ? DIAS3[pd(p.fecha).getUTCDay()].slice(0, 1) : corto(p.fecha);
+      svg.append(t);
+    });
+    const pick = (ev) => {
+      const rc = svg.getBoundingClientRect(), x = (ev.clientX - rc.left) / rc.width * W;
+      let best = null, bd = 1e9; vals.forEach((p) => { const i = pts.indexOf(p), d = Math.abs(i * step + step / 2 - x); if (d < bd) { bd = d; best = p; } });
+      if (!best || best === sel) return; sel = best; ST.sel = best.fecha;
+      rects.forEach((r) => r.setAttribute("fill", r.__p === sel ? m.color : "#3a3a3e")); showHead();
+    };
+    svg.addEventListener("pointerdown", pick); svg.addEventListener("pointermove", pick);
+    box.append(head, $("div", {class: "chart"}, svg));
+  };
+  const metPills = Object.entries(M).map(([k, m]) => $("button", {class: "pill", "aria-pressed": String(k === ST.metric), onclick: (e) => {
+    ST.metric = k; ST.sel = null; metPills.forEach((b) => b.setAttribute("aria-pressed", String(b === e.currentTarget))); draw(); }}, m.label === "Pulso en reposo" ? "Pulso" : m.label));
+  const diaPills = [7, 30, 90].map((d) => $("button", {class: "pill pill-sm", "aria-pressed": String(d === ST.dias), onclick: (e) => {
+    ST.dias = d; diaPills.forEach((b) => b.setAttribute("aria-pressed", String(b === e.currentTarget))); draw(); }}, d + " d"));
+  draw();
+  return $("section", {class: "card"},
+    $("div", {style: "display:flex;justify-content:space-between;align-items:center;gap:8px"}, $("div", {class: "card-h"}, "Estadísticas"), $("div", {style: "display:flex;gap:6px"}, diaPills)),
+    $("div", {class: "pills"}, metPills), box,
+    $("details", {class: "help"}, $("summary", {}, "¿Cómo leerlo?"), $("p", {}, "Cada barra es un día; tócala para ver su valor. Sueño: busca barras altas y parejas. Pulso y estrés: lo bueno es que se mantengan o bajen. HRV: estable o al alza indica que te adaptas bien. Un día malo no significa nada; fíjate en 2-3 días seguidos.")));
+}
+
+function pulsoArea() {
+  const pts = DATA.w.filter((r) => r.pulso !== null).slice(-14);
+  if (pts.length < 2) return $("div", {class: "empty"}, "Sin datos");
+  const W = 160, H = 80, lo = Math.min(...pts.map((p) => p.pulso)) - 3, hi = Math.max(...pts.map((p) => p.pulso)) + 2;
+  const x = (i) => 2 + i * (W - 8) / (pts.length - 1), y = (v) => H - 2 - (v - lo) / (hi - lo) * (H - 10);
+  const line = pts.map((p, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(p.pulso).toFixed(1)).join("");
+  const svg = S("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Pulso en reposo 14 días"});
+  const defs = S("defs"), g = S("linearGradient", {id: "hrg", x1: 0, x2: 0, y1: 0, y2: 1});
+  g.append(S("stop", {offset: "0%", "stop-color": "#ff4d5e", "stop-opacity": .45}), S("stop", {offset: "100%", "stop-color": "#ff4d5e", "stop-opacity": 0}));
+  defs.append(g);
+  const lp = pts[pts.length - 1];
+  svg.append(defs, S("path", {d: line + `L${x(pts.length - 1)},${H}L${x(0)},${H}Z`, fill: "url(#hrg)"}),
+    S("path", {d: line, fill: "none", stroke: "#ff4d5e", "stroke-width": 2.2, "stroke-linejoin": "round"}),
+    S("circle", {cx: x(pts.length - 1), cy: y(lp.pulso), r: 4.5, fill: "#fff", stroke: "#ff4d5e", "stroke-width": 2}));
+  return $("div", {}, $("div", {class: "chart"}, svg), $("div", {class: "mini-v", style: "margin-top:6px"}, f0(lp.pulso), $("small", {}, "lpm · 14 días")));
+}
+
+function consejo(f) {
+  const dp = f.pb !== null ? f.p3 - f.pb : 0, ds = f.s3 !== null && f.sb !== null ? f.s3 - f.sb : 0;
+  return dp >= 3 ? "Pulso elevado: prioriza dormir y bajar la carga estos días." : ds <= -0.5 ? "Estás durmiendo menos que tu base: esta semana el sueño es lo que más rinde." : "Vas llegando descansado.";
+}
+
+function planSemanas() {
+  const rows = DATA.semana, tb = $("tbody"), label = $("div", {class: "nav-t"}), prev = $("button", {class: "round", "aria-label": "Semana anterior"}, "‹"), next = $("button", {class: "round", "aria-label": "Semana siguiente"}, "›");
+  const lunes = (f) => { const d = pd(f); return addD(d, -((d.getUTCDay() + 6) % 7)); };
+  const draw = () => {
+    tb.replaceChildren();
+    if (!rows.length) { tb.append($("tr", {}, $("td", {colspan: 5, class: "empty"}, "Sin datos"))); return; }
+    const base = lunes(hoyStr()), minO = Math.round((lunes(rows[0].fecha) - base) / 6048e5), maxO = Math.round((lunes(rows[rows.length - 1].fecha) - base) / 6048e5);
+    ST.sem = Math.min(Math.max(ST.sem, minO), maxO);
+    prev.disabled = ST.sem <= minO; next.disabled = ST.sem >= maxO;
+    const ini = iso(addD(base, ST.sem * 7)), fin = iso(addD(base, ST.sem * 7 + 6)), hoy = hoyStr();
+    let t = corto(ini) + " – " + corto(fin);
+    if (ini <= "2026-11-22" && fin >= "2026-11-22") t += " · Semana de carrera"; else if (ini === "2026-11-09") t += " · Taper";
+    if (ST.sem === 0) t += " (esta semana)";
+    label.textContent = t;
+    rows.filter((x) => x.fecha >= ini && x.fecha <= fin).forEach((x) => tb.append($("tr", {class: x.fecha === hoy ? "is-today" : ""},
+      $("td", {}, x.dia + " " + corto(x.fecha)), $("td", {class: "wrap"}, x.sesion || "Sin plan cargado"),
+      $("td", {class: "wrap"}, x.act || (x.fecha < hoy ? "Descanso / sin registro" : "—")),
+      $("td", {class: "num"}, x.min === null ? "—" : f0(x.min)), $("td", {class: "num"}, x.hr === null ? "—" : f0(x.hr)))));
+  };
+  prev.addEventListener("click", () => { ST.sem--; draw(); }); next.addEventListener("click", () => { ST.sem++; draw(); });
+  draw();
+  return $("section", {class: "card"}, $("div", {class: "card-h"}, "Plan vs. lo que registró tu Garmin"), $("div", {class: "nav"}, prev, label, next),
+    $("div", {class: "tw"}, $("table", {}, $("thead", {}, $("tr", {}, $("th", {}, "Día"), $("th", {}, "Plan"), $("th", {}, "Lo que hiciste"), $("th", {class: "num"}, "Min"), $("th", {class: "num"}, "Pulso"))), tb)));
+}
+
+function render() {
+  const D = DATA, h = D.hoy, app = document.getElementById("app");
+  const hoyS = hoyStr();
+  // resumen
+  const lede = $("p", {class: "lede"});
+  if (h) {
+    if (h.sueno !== null) lede.append("Anoche dormiste ", $("b", {}, f1(h.sueno) + " h"), h.sueno_dif === null ? "" : h.sueno_dif > 0.2 ? ", más que tu promedio" : h.sueno_dif < -0.2 ? ", menos que tu promedio" : ", en línea con tu promedio", ". ");
+    if (h.pulso !== null) lede.append("Pulso en reposo ", $("b", {}, f0(h.pulso) + " lpm"), h.pulso_dif === null ? "" : h.pulso_dif <= -2 ? ": más bajo de lo habitual, buena señal de recuperación" : h.pulso_dif >= 2 ? ": más alto de lo habitual, puede ser cansancio o estrés" : ", dentro de lo habitual", ".");
+  } else lede.append("Aún no hay datos.");
+  const hrvRows = D.w.filter((r) => r.hrv !== null), hrvLast = hrvRows[hrvRows.length - 1];
+  // ayer
+  const ayer = iso(addD(pd(hoyS), -1)), ay = D.semana.find((x) => x.fecha === ayer);
+  // carrera
+  const ms = LARGADA - new Date(), dias = Math.ceil(ms / 864e5);
+  const planHoy = D.plan.find((p) => p.fecha === hoyS);
+  const f = D.forma;
+
+  app.replaceChildren(
+    $("header", {class: "head"}, $("div", {}, $("div", {class: "sub"}, largo(hoyS)), $("h1", {class: "title"}, "Hola, Vicente")),
+      $("button", {class: "avatar", "aria-label": "Actualizar", onclick: () => location.reload()}, "VG")),
+    lede,
+    $("section", {class: "card"}, $("div", {class: "card-h"}, "Tu recuperación de hoy"), $("div", {class: "card-s"}, "Sueño de anoche frente a una meta de 8 h"),
+      $("div", {class: "balance"},
+        $("ul", {class: "list"},
+          $("li", {}, $("span", {class: "ic"}, svgIcon(ICON.heart)), $("div", {}, $("div", {class: "k"}, "Pulso en reposo"), $("div", {class: "v"}, h && h.pulso !== null ? f0(h.pulso) : "—", $("small", {}, "lpm"), h ? chip(h.pulso_dif, true) : null))),
+          $("li", {}, $("span", {class: "ic"}, svgIcon(ICON.bolt)), $("div", {}, $("div", {class: "k"}, "Estrés promedio"), $("div", {class: "v"}, h && h.estres !== null ? f0(h.estres) : "—", $("small", {}, "/100"), h ? chip(h.estres_dif, true) : null))),
+          $("li", {}, $("span", {class: "ic"}, svgIcon(ICON.wave)), $("div", {}, $("div", {class: "k"}, "HRV nocturna"), $("div", {class: "v"}, hrvLast ? f0(hrvLast.hrv) : "Sin dato", hrvLast ? $("small", {}, "ms") : null, hrvLast && h && hrvLast.fecha !== h.fecha ? $("span", {class: "chip neu"}, "del " + corto(hrvLast.fecha)) : null)))),
+        anillo(h ? h.sueno : null)),
+      $("details", {class: "help"}, $("summary", {}, "¿Qué significa?"), $("ul", {},
+        $("li", {}, $("b", {}, "Anillo: "), "cuánto de la meta de 8 h dormiste. Es lo que más te recupera antes de la carrera."),
+        $("li", {}, $("b", {}, "Pulso en reposo: "), "si sube 3-5 sobre tu promedio es cansancio, estrés o un resfrío en camino; si baja, estás recuperado."),
+        $("li", {}, $("b", {}, "Estrés: "), "Garmin lo estima con tu pulso del día (0-100). Bajo 25 es descanso, sobre 50 es alto."),
+        $("li", {}, $("b", {}, "HRV: "), "más alta que tu promedio = recuperado. Compárala solo contigo mismo."),
+        $("li", {}, "Las etiquetas verde y roja te comparan con tu promedio de los 7 días anteriores.")))),
+    $("div", {class: "row"},
+      $("section", {class: "card"}, $("div", {class: "mini-h"}, "Pasos ayer"), $("div", {class: "mini-v"}, svgIcon(ICON.feet), h && h.pasos_ayer !== null ? f0(h.pasos_ayer) : "—"),
+        $("div", {class: "mini-s"}, "Referencia: 10.000"), $("div", {class: "bar"}, $("div", {style: `background:var(--teal);width:${h && h.pasos_ayer ? Math.min(100, h.pasos_ayer / 100) : 0}%`}))),
+      $("section", {class: "card"}, $("div", {class: "mini-h"}, "Entreno ayer"), $("div", {class: "mini-v"}, svgIcon(ICON.clock), ay && ay.min ? f0(ay.min) : "0", $("small", {}, "min")),
+        $("div", {class: "mini-s"}, ay && ay.act ? ay.act : "Descanso"), $("div", {class: "bar"}, $("div", {style: `background:var(--lime);width:${ay && ay.min ? Math.min(100, ay.min / 1.2) : 0}%`})))),
+    $("section", {class: "card race"}, $("div", {class: "card-h"}, "Across Andes 2026"), $("div", {class: "card-s"}, "Volcano Edition · Pairs · dom 22 nov, 08:00, Plaza de Armas de Pucón"),
+      $("div", {class: "race-top"},
+        $("div", {}, $("div", {class: "count"}, ms > 0 ? String(dias) : new Date() < FIN ? "¡Ya!" : "✓"), $("div", {class: "sub"}, ms > 0 ? (dias === 1 ? "día para la largada" : "días para la largada") : new Date() < FIN ? "En carrera" : "Carrera terminada")),
+        $("div", {class: "today"}, $("div", {class: "k"}, "Hoy te toca"), $("div", {class: "today-t"}, planHoy ? planHoy.sesion : (ms > 0 ? "Sin sesión planificada para hoy" : "Disfruta la carrera")), planHoy ? $("div", {class: "k", style: "margin-top:4px"}, planHoy.objetivo) : null)),
+      f && f.p3 !== null ? $("p", {class: "note"}, $("b", {}, "Cómo vienes llegando: "), consejo(f)) : null),
+    estadisticas(),
+    $("div", {class: "row"},
+      $("section", {class: "card"}, $("div", {class: "mini-h"}, "Pulso en reposo"), pulsoArea()),
+      $("section", {class: "card"}, $("div", {class: "mini-h"}, "Últimos 3 días"), $("div", {class: "mini-s"}, "vs. tu base del mes"),
+        f ? $("div", {style: "margin-top:10px"},
+          $("div", {class: "k"}, "Pulso en reposo"), $("div", {class: "v", style: "margin-bottom:10px"}, f.p3 === null ? "—" : f1(f.p3), $("small", {}, "lpm"), f.pb !== null && f.p3 !== null ? $("span", {class: "chip " + (Math.abs(f.p3 - f.pb) < 0.3 ? "neu" : f.p3 < f.pb ? "good" : "bad")}, "base " + f1(f.pb)) : null),
+          $("div", {class: "k"}, "Sueño"), $("div", {class: "v"}, f.s3 === null ? "—" : f1(f.s3), $("small", {}, "h"), f.sb !== null && f.s3 !== null ? $("span", {class: "chip " + (Math.abs(f.s3 - f.sb) < 0.3 ? "neu" : f.s3 > f.sb ? "good" : "bad")}, "base " + f1(f.sb)) : null)) : "—")),
+    planSemanas(),
+    $("section", {class: "card"}, $("div", {class: "card-h"}, "Etapas · Plan A"), $("div", {class: "card-s"}, "Horas en movimiento a NP 150-165 W, sin paradas"),
+      $("div", {class: "tw"}, $("table", {}, $("thead", {}, $("tr", {}, $("th", {}, "Día"), $("th", {}, "Tramo"), $("th", {class: "num"}, "Km"), $("th", {class: "num"}, "Desnivel"), $("th", {class: "num"}, "Horas"))),
+        $("tbody", {}, D.etapas.map((e) => $("tr", {}, $("td", {}, e.dia + " · " + corto(e.fecha)), $("td", {}, e.tramo), $("td", {class: "num"}, f0(+e.km)), $("td", {class: "num"}, f0(+e.desnivel_m)), $("td", {class: "num"}, f1(+e.horas_min) + "–" + f1(+e.horas_max))))))),
+      $("details", {class: "help"}, $("summary", {}, "Reglas de carrera"), $("ul", {},
+        $("li", {}, "Primeras 2 h a 140 W o menos. NP del día 1 en 150 W."),
+        $("li", {}, "Rodilla primero: cadencia 90-95 rpm, sentado, cambia antes de pisar fuerte."),
+        $("li", {}, "Dolor de rodilla 2/10: baja la intensidad. 3/10: aflojas de inmediato."),
+        $("li", {}, "Come cada 30 min desde el km 0: 60-80 g de carbohidrato por hora."),
+        $("li", {}, "Día 1: 78 km sin locales entre el km 174 e Icalma. Carga comida antes."),
+        $("li", {}, "127 km sin locales de Malalcahuello a Cunco: comida para 8 h y 4 L de agua o más."),
+        $("li", {}, "Supermercado del km 648 cierra a las 20:00."))),
+      $("details", {class: "help"}, $("summary", {}, "Glosario del plan"), $("dl", {},
+        $("dt", {}, "W (watts)"), $("dd", {}, "La potencia en los pedales: la medida más objetiva de tu esfuerzo."),
+        $("dt", {}, "Z1"), $("dd", {}, "Muy suave, de recuperación. Conversas sin esfuerzo."),
+        $("dt", {}, "Z2"), $("dd", {}, "Resistencia, hablas en frases completas. El ritmo de casi toda la carrera."),
+        $("dt", {}, "NP"), $("dd", {}, "Potencia normalizada: un promedio que pesa más los picos; refleja el costo real de la salida."),
+        $("dt", {}, "3×3 min a 270-285 W"), $("dd", {}, "3 repeticiones de 3 minutos a esa potencia, con 3 min suaves entre cada una."),
+        $("dt", {}, "Aperturas"), $("dd", {}, "Esfuerzos cortos (30 s a 1 min) para despertar las piernas sin cansarlas."),
+        $("dt", {}, "Cadencia (rpm)"), $("dd", {}, "Pedaladas por minuto. Con 90-95 haces menos fuerza por pedalada y cuidas la rodilla."),
+        $("dt", {}, "Taper"), $("dd", {}, "Semanas previas en que bajas el volumen para llegar fresco."),
+        $("dt", {}, "SPOT"), $("dd", {}, "El rastreador satelital de la organización; va encendido toda la carrera.")))),
+    $("section", {class: "card"}, $("div", {class: "card-h"}, "Entrenamientos"),
+      $("div", {class: "tw"}, $("table", {}, $("thead", {}, $("tr", {}, $("th", {}, "Fecha"), $("th", {}, "Actividad"), $("th", {class: "num"}, "Min"), $("th", {class: "num"}, "Km"), $("th", {class: "num"}, "Pulso"))),
+        $("tbody", {}, D.acts.slice(0, 40).map((a) => $("tr", {}, $("td", {}, corto(a.fecha) + (a.hora ? " · " + a.hora : "")), $("td", {}, a.nombre),
+          $("td", {class: "num"}, a.min === null ? "—" : f0(a.min)), $("td", {class: "num"}, a.km === null ? "—" : f2(a.km)), $("td", {class: "num"}, a.hr === null ? "—" : f0(a.hr)))))))),
+    $("div", {class: "foot"}, $("span", {}, D.updated ? "Datos de Garmin: " + corto(D.updated.slice(0, 10)) + ", " + D.updated.slice(11, 16) : ""),
+      $("button", {class: "link", onclick: () => { localStorage.removeItem(KEY); pantallaClave(); }}, "Cerrar sesión"))
+  );
+}
+
+// ---------- inicio ----------
+(async () => {
+  const pw = localStorage.getItem(KEY);
+  if (!pw) return pantallaClave();
+  try { await cargar(pw); } catch (e) { pantallaClave("No se pudo abrir con la clave guardada. Escríbela de nuevo."); }
+})();
+document.addEventListener("visibilitychange", () => { if (!document.hidden && DATA) { const pw = localStorage.getItem(KEY); if (pw) cargar(pw).catch(() => {}); } });
+</script>
+</body>
+</html>
