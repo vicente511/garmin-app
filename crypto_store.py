@@ -46,7 +46,20 @@ def main() -> None:
             return
         dst.write_bytes(descifrar(pw, src.read_text().strip()))
     else:
-        dst.write_text(cifrar(pw, src.read_bytes()))
+        nuevo = src.read_bytes()
+        # Si los datos no cambiaron (salvo la hora), no se reescribe: evita commits innecesarios.
+        if dst.exists():
+            import json
+            try:
+                viejo = json.loads(descifrar(pw, dst.read_text().strip()))
+                actual = json.loads(nuevo)
+                viejo.pop("updated", None); actual.pop("updated", None)
+                if viejo == actual:
+                    print("Sin cambios en los datos")
+                    return
+            except Exception:
+                pass
+        dst.write_text(cifrar(pw, nuevo))
 
 
 if __name__ == "__main__":

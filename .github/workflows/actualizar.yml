@@ -1,7 +1,8 @@
 name: Actualizar app Garmin
 on:
   schedule:
-    - cron: "40 6 * * *"   # ~3:40 hora de Chile (verano)
+    - cron: "40 6 * * *"            # ~3:40 hora de Chile (verano): datos de la noche
+    - cron: "15 0-2,9-23 * * *"     # cada hora de 6:15 a 23:15 hora de Chile (verano)
   workflow_dispatch:
 permissions:
   contents: write

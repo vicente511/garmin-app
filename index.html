@@ -90,6 +90,12 @@ tr.is-today td{color:var(--or2);font-weight:600}
 .empty{color:var(--mu);font-size:13px;padding:22px 0;text-align:center}
 .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--mu);font-size:12px;padding:0 4px}
 .link{background:none;border:0;color:var(--or2);font:inherit;font-size:12px;padding:6px 0}
+.hbtns{display:flex;gap:10px;align-items:center}
+.refresh{width:48px;height:48px;border-radius:50%;border:0;background:var(--card);color:var(--tx);display:flex;align-items:center;justify-content:center}
+.refresh svg{width:22px;height:22px}
+.refresh.busy svg{animation:gira 1s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 18px);transform:translateX(-50%);background:#2c2c30;color:var(--tx);padding:10px 16px;border-radius:999px;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.4);z-index:9;white-space:nowrap}
 /* bloqueo */
 .lock{min-height:80vh;display:flex;flex-direction:column;justify-content:center;gap:16px;max-width:380px;margin:0 auto}
 .lock input{font:inherit;font-size:17px;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--tx);width:100%}
@@ -166,6 +172,21 @@ function pantallaClave(msg) {
 }
 
 let DATA = null;
+function toast(msg) {
+  document.querySelectorAll(".toast").forEach((t) => t.remove());
+  const t = $("div", {class: "toast"}, msg); document.body.append(t); setTimeout(() => t.remove(), 3500);
+}
+async function actualizar(btn) {
+  const pw = localStorage.getItem(KEY);
+  if (!pw) return pantallaClave();
+  if (btn) btn.classList.add("busy");
+  try {
+    await cargar(pw);
+    const u = DATA.updated;
+    toast(u ? "Al día · datos de las " + u.slice(11, 16) + (u.slice(0, 10) !== hoyStr() ? " del " + corto(u.slice(0, 10)) : "") : "Al día");
+  } catch (e) { toast("No se pudo actualizar. Revisa tu conexión."); }
+  finally { document.querySelectorAll(".refresh").forEach((b) => b.classList.remove("busy")); }
+}
 async function cargar(pw) {
   const [d, p] = await Promise.all([bajar("data.enc"), bajar("plan.enc").catch(() => null)]);
   const store = await descifrar(pw, d);
@@ -374,7 +395,10 @@ function render() {
 
   app.replaceChildren(
     $("header", {class: "head"}, $("div", {}, $("div", {class: "sub"}, largo(hoyS)), $("h1", {class: "title"}, "Hola, Vicente")),
-      $("button", {class: "avatar", "aria-label": "Actualizar", onclick: () => location.reload()}, "VG")),
+      $("div", {class: "hbtns"},
+        $("button", {class: "refresh", "aria-label": "Actualizar datos", onclick: (e) => actualizar(e.currentTarget)},
+          svgIcon('<svg viewBox="0 0 24 24" fill="none" stroke="#ffb547" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>')),
+        $("div", {class: "avatar", "aria-hidden": "true"}, "VG"))),
     lede,
     $("section", {class: "card"}, $("div", {class: "card-h"}, "Tu recuperación de hoy"), $("div", {class: "card-s"}, "Sueño de anoche frente a una meta de 8 h"),
       $("div", {class: "balance"},
@@ -432,7 +456,7 @@ function render() {
       $("div", {class: "tw"}, $("table", {}, $("thead", {}, $("tr", {}, $("th", {}, "Fecha"), $("th", {}, "Actividad"), $("th", {class: "num"}, "Min"), $("th", {class: "num"}, "Km"), $("th", {class: "num"}, "Pulso"))),
         $("tbody", {}, D.acts.slice(0, 40).map((a) => $("tr", {}, $("td", {}, corto(a.fecha) + (a.hora ? " · " + a.hora : "")), $("td", {}, a.nombre),
           $("td", {class: "num"}, a.min === null ? "—" : f0(a.min)), $("td", {class: "num"}, a.km === null ? "—" : f2(a.km)), $("td", {class: "num"}, a.hr === null ? "—" : f0(a.hr)))))))),
-    $("div", {class: "foot"}, $("span", {}, D.updated ? "Datos de Garmin: " + corto(D.updated.slice(0, 10)) + ", " + D.updated.slice(11, 16) : ""),
+    $("div", {class: "foot"}, $("span", {}, D.updated ? "Datos de Garmin: " + corto(D.updated.slice(0, 10)) + ", " + D.updated.slice(11, 16) + " · se actualizan solos cada hora" : ""),
       $("button", {class: "link", onclick: () => { localStorage.removeItem(KEY); pantallaClave(); }}, "Cerrar sesión"))
   );
 }
